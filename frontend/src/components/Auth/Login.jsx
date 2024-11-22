@@ -14,7 +14,7 @@ const Login = () => {
     try {
       const res = await axios.post('http://localhost:5000/login', { email, password });
       toast.success('Login successful!'); // Toastr success message
-      navigate('/landing', { state: { userName: res.data.name } });
+      navigate('/landing', { state: { userName: res.data.name, userEmail: email } });
     } catch (error) {
       console.error(error);
       toast.error('Invalid credentials'); // Toastr error message

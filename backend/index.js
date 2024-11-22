@@ -59,7 +59,9 @@ app.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ msg: 'Login successful', token, name: user.name });
+
+    // Send the token and user._id in the response
+    res.json({ msg: 'Login successful', token, email, name: user.name });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
@@ -68,11 +70,11 @@ app.post('/login', async (req, res) => {
 
 // Get users with similar interests route
 app.get('/getUsersWithSimilarInterests', async (req, res) => {
-  const { userId } = req.query;
+  const { email } = req.query;  // Change from userId to email
 
   try {
-    // Find the current user
-    const currentUser = await User.findById(userId);
+    // Find the current user by email
+    const currentUser = await User.findOne({ email });
     if (!currentUser) {
       return res.status(404).json({ msg: 'User not found' });
     }
@@ -93,6 +95,7 @@ app.get('/getUsersWithSimilarInterests', async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 });
+
 
 // Server listening
 const PORT = process.env.PORT || 5000;

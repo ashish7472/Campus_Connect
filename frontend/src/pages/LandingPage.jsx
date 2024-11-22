@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion'; // Import Framer Motion for animation
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
   const [showMoreUsers, setShowMoreUsers] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const userName = location.state?.userName || '';
+  const userEmail = location.state?.userEmail || '';
   
   const usersWithSimilarInterests = [
     { name: 'John Doe', department: 'CSE', graduationYear: '2025' },
