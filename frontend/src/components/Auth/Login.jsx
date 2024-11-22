@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom'; // Import Link
+import { ToastContainer, toast } from 'react-toastify'; // Import Toastr
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastr CSS
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,11 +13,11 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/login', { email, password });
-      alert('Login successful!');
+      toast.success('Login successful!'); // Toastr success message
       navigate('/landing', { state: { userName: res.data.name } });
     } catch (error) {
       console.error(error);
-      alert('Invalid credentials');
+      toast.error('Invalid credentials'); // Toastr error message
     }
   };
 
@@ -49,6 +51,7 @@ const Login = () => {
           </Link>
         </p>
       </form>
+      <ToastContainer /> {/* Add ToastContainer to render notifications */}
     </div>
   );
 };

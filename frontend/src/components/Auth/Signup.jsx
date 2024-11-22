@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { ToastContainer, toast } from 'react-toastify'; // Import Toastr
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastr CSS
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,8 @@ const Signup = () => {
     interests: '',
   });
 
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -21,10 +25,13 @@ const Signup = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:5000/signup', { ...formData });
-      alert('Signup successful!');
+      toast.success('Signup successful!'); // Toastr success message
+      setTimeout(() => {
+        navigate('/login'); // Redirect to login page after signup success
+      }, 2000); // Delay to ensure toast message shows up before navigation
     } catch (error) {
       console.error(error);
-      alert('Error signing up!');
+      toast.error('Error signing up!'); // Toastr error message
     }
   };
 
@@ -60,6 +67,7 @@ const Signup = () => {
           </Link>
         </p>
       </form>
+      <ToastContainer /> {/* Add ToastContainer to render notifications */}
     </div>
   );
 };
