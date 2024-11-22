@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion'; // Import Framer Motion for animation
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios for API requests
 
 const LandingPage = () => {
   const [showMoreUsers, setShowMoreUsers] = useState(false);
@@ -32,6 +33,24 @@ const LandingPage = () => {
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    const fetchUsersWithSimilarInterests = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/getUsersWithSimilarInterests', {
+          params: { email: userEmail },
+        });        
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching users with similar interests:", error);
+      }
+    };
+
+    if (userEmail) {
+      fetchUsersWithSimilarInterests(); // Fetch the data if email exists
+    }
+  }, [userEmail]); // Re-fetch when the email changes
 
   const modalRef = useRef(null);
 
