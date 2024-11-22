@@ -9,7 +9,7 @@ const Navbar = () => {
   const handleLogout = () => {
     // Clear the user data (this can be customized based on your authentication flow)
     localStorage.removeItem('authToken');
-    navigate('/login');  // Redirect to login page after logout
+    navigate('/');  // Redirect to login page after logout
   };
 
   return (

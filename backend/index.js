@@ -66,6 +66,34 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Get users with similar interests route
+app.get('/getUsersWithSimilarInterests', async (req, res) => {
+  const { userId } = req.query;
+
+  try {
+    // Find the current user
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    // Find users with at least one matching interest
+    const similarUsers = await User.find({
+      _id: { $ne: currentUser._id }, // Exclude the current user
+      interests: { $in: currentUser.interests }, // Match any shared interests
+    }).select('-password'); // Exclude the password from the response
+
+    if (similarUsers.length === 0) {
+      return res.status(404).json({ msg: 'No users found with similar interests' });
+    }
+
+    res.json(similarUsers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 // Server listening
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
