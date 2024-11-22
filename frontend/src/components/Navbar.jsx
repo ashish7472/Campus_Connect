@@ -16,7 +16,14 @@ const Navbar = () => {
   return (
     <nav className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 text-white py-5 px-8 flex justify-between items-center shadow-lg h-24">
       {/* Left side: CAMPUSCONNECT */}
-      <h1 className="text-3xl font-extrabold tracking-wide text-white">NOLAN</h1>
+      <div className="flex items-center justify-center space-x-3 mb-1">
+          <img
+            src="../public/images/ccLogo.png" // Replace with the correct path
+            alt="Campus-Connect Logo"
+            className="w-16 h-16"
+          />
+      </div>
+
 
       {/* Middle: Navigation menu */}
       <div className="space-x-6 hidden md:flex">
