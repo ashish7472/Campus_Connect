@@ -8,20 +8,13 @@ const LandingPage = () => {
   const [showMoreUsers, setShowMoreUsers] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [usersWithSimilarInterests, setUsersWithSimilarInterests] = useState([]); // State to store fetched users
   const location = useLocation();
   const navigate = useNavigate();
 
   const userName = location.state?.userName || '';
   const userEmail = location.state?.userEmail || '';
   
-  const usersWithSimilarInterests = [
-    { name: 'John Doe', department: 'CSE', graduationYear: '2025' },
-    { name: 'Jane Smith', department: 'ECE', graduationYear: '2024' },
-    { name: 'Sam Wilson', department: 'IT', graduationYear: '2025' },
-    { name: 'Alice Brown', department: 'ME', graduationYear: '2023' },
-    { name: 'Chris Johnson', department: 'CSE', graduationYear: '2026' },
-  ];
-
   const events = [
     { title: 'Hackathon', date: 'Nov 25', image: '../public/images/img1.png', description: 'A fun coding event for everyone!' },
     { title: 'AI Workshop', date: 'Nov 27', image: '../public/images/img2.png', description: 'Learn the basics of Artificial Intelligence.' },
@@ -39,9 +32,10 @@ const LandingPage = () => {
       try {
         const response = await axios.get('http://localhost:5000/getUsersWithSimilarInterests', {
           params: { email: userEmail },
-        });        
+        });
 
-        console.log(response.data);
+        console.log(response.data);  // Check response structure
+        setUsersWithSimilarInterests(response.data); // Set the fetched users
       } catch (error) {
         console.error("Error fetching users with similar interests:", error);
       }
@@ -186,32 +180,6 @@ const LandingPage = () => {
             </div>
           )}
         </motion.section>
-
-        {/* Show More Events in a Big Card in the Center */}
-        {showMoreEvents && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-            <div ref={modalRef} className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full max-h-[80vh] overflow-y-auto relative">
-              {/* Close Button (X sign) */}
-              <button
-                onClick={() => setShowMoreEvents(false)}
-                className="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-gray-800"
-              >
-                &times;
-              </button>
-              <h3 className="text-2xl font-semibold text-center mb-6">More Events</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {events.map((event, index) => (
-                  <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                    <img src={event.image} alt={event.title} className="w-full h-48 object-cover rounded-t-lg mb-4" />
-                    <h3 className="font-semibold text-lg">{event.title}</h3>
-                    <p className="text-sm text-gray-500">{event.date}</p>
-                    <p className="text-sm text-gray-600">{event.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
